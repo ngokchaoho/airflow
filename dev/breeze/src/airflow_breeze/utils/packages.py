@@ -53,16 +53,6 @@ HTTPS_REMOTE = "apache-https-for-providers"
 
 LONG_PROVIDERS_PREFIX = "apache-airflow-providers-"
 
-# TODO: use single source of truth for those
-# for now we need to keep them in sync with the ones in setup.py
-PREINSTALLED_PROVIDERS = [
-    "common.sql",
-    "ftp",
-    "http",
-    "imap",
-    "sqlite",
-]
-
 
 class EntityType(Enum):
     Operators = "Operators"

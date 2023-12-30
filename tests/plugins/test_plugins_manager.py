@@ -26,13 +26,13 @@ from pathlib import Path
 from unittest import mock
 
 import pytest
+from setup import AIRFLOW_SOURCES_ROOT
 
 from airflow.hooks.base import BaseHook
 from airflow.listeners.listener import get_listener_manager
 from airflow.plugins_manager import AirflowPlugin
 from airflow.utils.module_loading import qualname
 from airflow.www import app as application
-from setup import AIRFLOW_SOURCES_ROOT
 from tests.test_utils.config import conf_vars
 from tests.test_utils.mock_plugins import mock_plugin_manager
 

@@ -36,6 +36,7 @@ from unittest.mock import sentinel
 import pendulum
 import pytest
 import sqlalchemy.exc
+from setup import AIRFLOW_SOURCES_ROOT
 
 from airflow.cli import cli_parser
 from airflow.cli.commands import task_command
@@ -49,7 +50,6 @@ from airflow.utils import timezone
 from airflow.utils.session import create_session
 from airflow.utils.state import State
 from airflow.utils.types import DagRunType
-from setup import AIRFLOW_SOURCES_ROOT
 from tests.test_utils.config import conf_vars
 from tests.test_utils.db import clear_db_pools, clear_db_runs
 

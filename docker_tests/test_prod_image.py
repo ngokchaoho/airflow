@@ -20,10 +20,10 @@ import json
 import os
 import subprocess
 from importlib.util import find_spec
+from pathlib import Path
 
 import pytest
 
-# isort:off (needed to workaround isort bug)
 from docker_tests.command_utils import run_command
 from docker_tests.constants import SOURCE_ROOT
 from docker_tests.docker_tests_utils import (
@@ -33,10 +33,17 @@ from docker_tests.docker_tests_utils import (
     run_python_in_docker,
 )
 
-# isort:on (needed to workaround isort bug)
-from setup import PREINSTALLED_PROVIDERS
-
 INSTALLED_PROVIDER_PATH = SOURCE_ROOT / "airflow" / "providers" / "installed_providers.txt"
+AIRFLOW_ROOT_PATH = Path(__file__).parents[2].resolve()
+PREINSTALLED_PROVIDERS_FILE = AIRFLOW_ROOT_PATH / "dev" / "preinstalled_providers.json"
+PREINSTALLED_PROVIDER_IDS = json.loads(PREINSTALLED_PROVIDERS_FILE.read_text())
+SLIM_IMAGE_PROVIDERS = [
+    f"apache-airflow-providers-{provider_id.replace('.','-')}" for provider_id in PREINSTALLED_PROVIDER_IDS
+]
+REGULAR_IMAGE_PROVIDERS = [
+    f"apache-airflow-providers-{provider_id.replace('.','-')}"
+    for provider_id in INSTALLED_PROVIDER_PATH.read_text().splitlines()
+]
 
 
 class TestCommands:
@@ -80,12 +87,10 @@ class TestCommands:
 class TestPythonPackages:
     def test_required_providers_are_installed(self):
         if os.environ.get("TEST_SLIM_IMAGE"):
-            lines = PREINSTALLED_PROVIDERS
+            packages_to_install = SLIM_IMAGE_PROVIDERS
         else:
-            lines = (d.strip() for d in INSTALLED_PROVIDER_PATH.read_text().splitlines())
-        packages_to_install = {f"apache-airflow-providers-{d.replace('.', '-')}" for d in lines}
+            packages_to_install = REGULAR_IMAGE_PROVIDERS
         assert len(packages_to_install) != 0
-
         output = run_bash_in_docker(
             "airflow providers list --output json", stderr=subprocess.DEVNULL, return_output=True
         )

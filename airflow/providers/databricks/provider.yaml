@@ -67,6 +67,9 @@ dependencies:
   - databricks-sql-connector>=2.0.0, <3.0.0, !=2.9.0
   - aiohttp>=3.6.3, <4
 
+devel-dependencies:
+  - deltalake>=0.12.0
+
 integrations:
   - integration-name: Databricks
     external-doc-url: https://databricks.com/
